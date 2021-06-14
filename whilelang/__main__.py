@@ -26,13 +26,15 @@ def get_argparse():
                         action="store",
                         type=int,
                         default=0,
-                        help="First argument.")
+                        help="First argument.",
+                        nargs="?")
 
     parser.add_argument("x2",
                         action="store",
                         type=int,
                         default=0,
-                        help="Second argument.")
+                        help="Second argument.",
+                        nargs="?")
 
     return parser
 
