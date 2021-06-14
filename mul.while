@@ -1,0 +1,9 @@
+x0 := 0;
+WHILE x1 DO
+    ctr := x2 + 0;
+    WHILE ctr DO
+        x0 := x0 + 1;
+        ctr := ctr - 1
+    END;
+    x1 := x1 - 1
+END
