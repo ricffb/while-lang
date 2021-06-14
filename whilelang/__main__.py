@@ -37,7 +37,7 @@ def get_argparse():
     return parser
 
 
-def main(argv):
+def _main(argv):
     parser = get_argparse()
     args = parser.parse_args(argv)
 
@@ -51,4 +51,9 @@ def main(argv):
     print(f"Result: x0 = {var['x0']}")
 
 
-main(sys.argv[1:])
+def main():
+    _main(sys.argv[1:])
+
+
+if __name__ == "__main__":
+    main()
