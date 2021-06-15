@@ -13,6 +13,14 @@ class Assign(Program):
 
 
 @dataclass
+class AssignSub(Program):
+    lvar: str
+    routine: str
+    arg1: str
+    arg2: str
+
+
+@dataclass
 class _BinOp(Program):
     lvar: str
     rvar: str

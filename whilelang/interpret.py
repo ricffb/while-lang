@@ -1,12 +1,19 @@
 from .parse import PProgram
-from .models import Program, Assign, Seq, Add, Sub, While
+from .models import Program, Assign, Seq, Add, Sub, While, AssignSub
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Dict
 
 
-def _interpret(p: Program, var: DefaultDict[str, int]):
+def _interpret(p: Program, var: DefaultDict[str, int],
+               subroutines: Dict[str, Program]):
     if isinstance(p, Assign):
         var[p.lvar] = p.rval
+        return var
+    if isinstance(p, AssignSub):
+        subr = subroutines[p.routine]
+        a1 = var[p.arg1]
+        a2 = var[p.arg2]
+        var[p.lvar] = interpret(subr, a1, a2, subroutines)["x0"]
         return var
     if isinstance(p, Add):
         var[p.lvar] = var[p.rvar] + p.rval
@@ -15,23 +22,24 @@ def _interpret(p: Program, var: DefaultDict[str, int]):
         var[p.lvar] = var[p.rvar] - p.rval
         return var
     if isinstance(p, Seq):
-        var = _interpret(p.p1, var)
-        return _interpret(p.p2, var)
+        var = _interpret(p.p1, var, subroutines)
+        return _interpret(p.p2, var, subroutines)
     if isinstance(p, While):
         while var[p.cond] != 0:
-            var = _interpret(p.body, var)
+            var = _interpret(p.body, var, subroutines)
         return var
 
 
-def interpret(p: Program, x1=0, x2=0):
+def interpret(p: Program, x1=0, x2=0, subroutines: Dict[str, Program] = None):
     var = defaultdict(lambda: 0, {"x0": 0, "x1": x1, "x2": x2})
-    return _interpret(p, var)
+    subroutines = subroutines or {}
+    return _interpret(p, var, subroutines)
 
 
 def run(program, x1=0, x2=0):
     if hasattr(program, "read"):
-        P = PProgram.parse(program.read())
+        Subs, P = PProgram.parse(program.read())
     else:
-        P = PProgram.parse(program)
+        Subs, P = PProgram.parse(program)
 
-    return interpret(P, x1, x2)
+    return interpret(P, x1, x2, Subs)

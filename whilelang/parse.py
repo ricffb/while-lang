@@ -1,18 +1,45 @@
-from .models import Assign, Sub, Add, While, Seq
+from .models import Assign, Sub, Add, While, Seq, AssignSub
 from parsy import regex, string, digit, generate, seq, eof  #type: ignore
 
 whitespace = regex(r'[\s]*')
-lexeme = lambda p: p << whitespace
+pad = regex(r'[^\S\r\n]')
+
+Newline = regex(r"\n")
+Next = (Newline.at_least(1)
+        | eof).desc("at least one newline or the end of file")
+Comment = string("#") >> (regex(r'[\S]') | pad).many().concat() >> Next
+
+woc = whitespace << Comment.optional() << whitespace
+lexeme = lambda p: p << woc
+
+lbrac = lexeme(string("("))
+rbrac = lexeme(string(")"))
+comma = lexeme(string(","))
 
 Eq = lexeme(string(":="))
 Plus = lexeme(string("+"))
 Minus = lexeme(string("-"))
-KWhile = lexeme(string("WHILE"))
-KDo = lexeme(string("DO"))
-KEnd = lexeme(string("END"))
+KWhile = lexeme(string("WHILE")).desc("the keyword WHILE")
+KAs = lexeme(string("AS")).desc("the keyword AS")
+KDefine = lexeme(string("DEFINE")).desc("the keyword DEFINE")
+KDo = lexeme(string("DO")).desc("the keyword DO")
+KEnd = lexeme(string("END")).desc("the keyword END")
+NoKeyWd = (
+    KWhile | KDo | KAs | KDefine
+    | KEnd).should_fail("not a reserved keyword that cannot be used as value")
 KSeq = lexeme(string(";"))
-Int = lexeme(digit.many().concat().map(int))
+Int = lexeme(digit.at_least(1).concat().map(int))
 Var = lexeme(regex("[a-z][A-Za-z0-9_]*"))
+Routine = NoKeyWd >> lexeme(regex("[A-Za-z_][A-Za-z0-9_]*"))
+
+PAssignSub = seq(lvar=Var,
+                 _eq=Eq,
+                 routine=Routine,
+                 _lbrac=lbrac,
+                 arg1=Var,
+                 _comma=comma,
+                 arg2=Var,
+                 _rbrac=rbrac).combine_dict(AssignSub)
 
 PAssign = seq(lvar=Var, _eq=Eq, rval=Int).combine_dict(Assign)
 
@@ -48,5 +75,19 @@ def PSeq():
     return Seq(P1, P2)
 
 
-_Program = PSeq | PWhile | PBinOp | PAssign
-PProgram = whitespace >> _Program
+@generate
+def Subroutine():
+    yield KDefine
+    RName = yield Routine
+    yield KAs
+    P = yield _Program
+    yield KEnd
+    return (RName, P)
+
+
+PSubroutineDef = woc >> Subroutine.many().map(dict)
+
+_Program = PSeq | PWhile | PBinOp | PAssign | PAssignSub
+_PProgram = woc >> _Program
+
+PProgram = seq(PSubroutineDef, _Program)
