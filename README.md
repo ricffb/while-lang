@@ -3,7 +3,7 @@ A small Parser and Interpreter for the Educational WHILE - Programming Language 
 
 # Syntax:
 ```
-File -> {SubroutineDef} Program 
+File -> [SubroutineDef]* Program 
 
 SubroutineDef -> DEFINE RoutineName AS Program END
 
@@ -12,7 +12,7 @@ Assign -> Var := Integer
 Add -> Var := Var + Integer
 Sub -> Var := Var - Integer
 While -> WHILE Var DO Program END
-AssignSub -> RoutineName ( Var , Var )
+AssignSub -> Var := RoutineName ( Var , Var )
 
 RoutineName ->  [A-Za-z_][A-Za-z0-9_]*
 Var -> x0 | x1 | x2 | [a-z][A-Za-z0-9_]*
