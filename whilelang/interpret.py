@@ -19,7 +19,7 @@ def _interpret(p: Program, var: DefaultDict[str, int],
         var[p.lvar] = var[p.rvar] + p.rval
         return var
     if isinstance(p, Sub):
-        var[p.lvar] = var[p.rvar] - p.rval
+        var[p.lvar] = max(0, var[p.rvar] - p.rval)
         return var
     if isinstance(p, Seq):
         var = _interpret(p.p1, var, subroutines)
@@ -28,6 +28,7 @@ def _interpret(p: Program, var: DefaultDict[str, int],
         while var[p.cond] != 0:
             var = _interpret(p.body, var, subroutines)
         return var
+    return var
 
 
 def interpret(p: Program, x1=0, x2=0, subroutines: Dict[str, Program] = None):
