@@ -1,0 +1,6 @@
+DEFINE M AS
+x0 := x1 - 1
+END
+
+x1 := M(x1,x2);
+x0 := x1 + 1
