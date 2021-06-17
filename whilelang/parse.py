@@ -68,7 +68,7 @@ def PWhile():
 
 @generate
 def PSeq():
-    P1 = yield PWhile | PBinOp | PAssign
+    P1 = yield PWhile | PBinOp | PAssign | PAssignSub
     yield KSeq
     P2 = yield _Program | whitespace  #type: ignore
 
@@ -88,6 +88,5 @@ def Subroutine():
 PSubroutineDef = woc >> Subroutine.many().map(dict)
 
 _Program = PSeq | PWhile | PBinOp | PAssign | PAssignSub
-_PProgram = woc >> _Program
 
 PProgram = seq(PSubroutineDef, _Program)
