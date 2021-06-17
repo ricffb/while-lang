@@ -70,7 +70,7 @@ def PWhile():
 def PSeq():
     P1 = yield PWhile | PBinOp | PAssign
     yield KSeq
-    P2 = yield _Program | whitespace >> eof
+    P2 = yield _Program | whitespace  #type: ignore
 
     return Seq(P1, P2)
 
