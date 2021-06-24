@@ -5,8 +5,15 @@ whitespace = regex(r'[\s]*')
 pad = regex(r'[^\S\r\n]')
 
 Newline = regex(r"\n")
-Next = (Newline.at_least(1)
-        | eof).desc("at least one newline or the end of file")
+_Next = (Newline.at_least(1)
+         | eof).desc("at least one newline or the end of file")
+
+
+@generate
+def Next():
+    yield Comment | _Next >> Comment | _Next
+
+
 Comment = string("#") >> (regex(r'[\S]') | pad).many().concat() >> Next
 
 woc = whitespace << Comment.optional() << whitespace
