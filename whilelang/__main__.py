@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from .jit import run_jit
 from .interpret import run
 from .parse import PProgram
 from pathlib import Path
@@ -21,7 +22,10 @@ def get_argparse():
                         action="store",
                         type=Path,
                         help="The File containing the Program")
-
+    parser.add_argument(
+        "-i",
+        action="store_true",
+        help="Run in interpret mode. (Don't JIT Compile the While Code)")
     parser.add_argument("x1",
                         action="store",
                         type=int,
@@ -48,9 +52,13 @@ def _main(argv):
         return
 
     with args.file.open("r") as fd:
-        var = run(fd, args.x1, args.x2)
+        if args.i:
+            var = run(fd, args.x1, args.x2)
+            res = var["x0"]
+        else:
+            res = run_jit(fd, args.x1, args.x2)
 
-    print(f"Result: x0 = {var['x0']}")
+    print(f"Result: x0 = {res}")
 
 
 def main():
