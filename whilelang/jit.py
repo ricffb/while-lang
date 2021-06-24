@@ -1,4 +1,4 @@
-from .parse import PProgram
+from .parse import PProgram, parse_while
 from .models import Program, Assign, Add, Seq, Sub, While, AssignSub
 from llvmlite import ir  #type: ignore
 from ctypes import CFUNCTYPE, c_int64
@@ -194,11 +194,7 @@ def get_main_func(prog: Tuple[Dict[str, Program], Program],
 
 
 def compile_while_prog(program, engine=defaultengine):
-    if hasattr(program, "read"):
-        P = PProgram.parse(program.read())
-    else:
-        P = PProgram.parse(program)
-
+    P = parse_while(program)
     return get_main_func(P, engine)
 
 

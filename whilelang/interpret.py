@@ -1,4 +1,4 @@
-from .parse import PProgram
+from .parse import PProgram, parse_while
 from .models import Program, Assign, Seq, Add, Sub, While, AssignSub
 from collections import defaultdict
 from typing import DefaultDict, Dict
@@ -38,9 +38,5 @@ def interpret(p: Program, x1=0, x2=0, subroutines: Dict[str, Program] = None):
 
 
 def run(program, x1=0, x2=0):
-    if hasattr(program, "read"):
-        Subs, P = PProgram.parse(program.read())
-    else:
-        Subs, P = PProgram.parse(program)
-
+    Subs, P = parse_while(program)
     return interpret(P, x1, x2, dict(Subs))

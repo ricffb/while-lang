@@ -90,3 +90,10 @@ PSubroutineDef = woc >> Subroutine.many().map(tuple)
 _Program = PSeq | PWhile | PBinOp | PAssign | PAssignSub
 
 PProgram = seq(PSubroutineDef, _Program).map(tuple)
+
+
+def parse_while(definition):
+    if hasattr(definition, "read"):
+        return PProgram.parse(definition.read())
+    else:
+        return PProgram.parse(definition)
