@@ -181,7 +181,7 @@ def compile_module(mod, engine=defaultengine):
 
 def get_main_func(prog: Tuple[Dict[str, Program], Program],
                   engine=defaultengine):
-    mod_ir = emit_ir(prog[1], prog[0])
+    mod_ir = emit_ir(prog[1], dict(prog[0]))
     mod = optimize_ir(mod_ir, opt_level=3)
     # engine = create_execution_engine()
     cmp = compile_module(mod, engine)

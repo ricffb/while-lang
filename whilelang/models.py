@@ -1,18 +1,18 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Program:
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Assign(Program):
     lvar: str
     rval: int
 
 
-@dataclass
+@dataclass(frozen=True)
 class AssignSub(Program):
     lvar: str
     routine: str
@@ -20,30 +20,30 @@ class AssignSub(Program):
     arg2: str
 
 
-@dataclass
+@dataclass(frozen=True)
 class _BinOp(Program):
     lvar: str
     rvar: str
     rval: int
 
 
-@dataclass
+@dataclass(frozen=True)
 class Add(_BinOp):
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class Sub(_BinOp):
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class While(Program):
     cond: str
     body: Program
 
 
-@dataclass
+@dataclass(frozen=True)
 class Seq(Program):
     p1: Program
     p2: Program

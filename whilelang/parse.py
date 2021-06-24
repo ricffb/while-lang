@@ -85,8 +85,8 @@ def Subroutine():
     return (RName, P)
 
 
-PSubroutineDef = woc >> Subroutine.many().map(dict)
+PSubroutineDef = woc >> Subroutine.many().map(tuple)
 
 _Program = PSeq | PWhile | PBinOp | PAssign | PAssignSub
 
-PProgram = seq(PSubroutineDef, _Program)
+PProgram = seq(PSubroutineDef, _Program).map(tuple)

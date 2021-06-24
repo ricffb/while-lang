@@ -43,4 +43,4 @@ def run(program, x1=0, x2=0):
     else:
         Subs, P = PProgram.parse(program)
 
-    return interpret(P, x1, x2, Subs)
+    return interpret(P, x1, x2, dict(Subs))
