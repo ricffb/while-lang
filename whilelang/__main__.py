@@ -7,7 +7,7 @@ import sys
 
 
 def get_argparse():
-    parser = ArgumentParser(prog="while",
+    parser = ArgumentParser(prog="whilelang",
                             description="WHILE lang interpreter.")
 
     parser.add_argument(
