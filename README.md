@@ -1,5 +1,36 @@
 # while-lang
 A small Parser and Interpreter for the Educational WHILE - Programming Language by Uwe Schoening. 
+# Installation
+Install the latest Version with pip
+```
+pip install while-lang
+```
+
+# Using the CLI
+
+After a successful installation you can use the `whilelang` script.
+```
+whilelang pathto/prog.while 1 2
+```
+where `1` and `2` are the inputs for `x1` and `x2` respectively.
+
+Use `-h` for help.
+
+```
+usage: whilelang [-h] [-p] [-i] file [x1] [x2]
+
+WHILE lang interpreter.
+
+positional arguments:
+  file              The File containing the Program
+  x1                First argument.
+  x2                Second argument.
+
+optional arguments:
+  -h, --help        show this help message and exit
+  -p, --parse-only  Only parse the file without running. Useful for testing if the file format is correct.
+  -i                Run in interpret mode. (Don't JIT Compile the While Code)
+```
 
 # Syntax:
 ```
