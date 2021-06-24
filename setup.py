@@ -19,6 +19,7 @@ setup(
               'TIMI'],  # Keywords that define your package best
     install_requires=[  # I get to this in a second
         'parsy',
+        'llvmlite',
     ],
     entry_points={'console_scripts': ['whilelang = whilelang.__main__:main']},
     classifiers=[
