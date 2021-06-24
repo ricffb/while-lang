@@ -33,6 +33,9 @@ defaultengine = create_execution_engine()
 
 
 def build_ir(p, var, builder: ir.IRBuilder, subroutines: Dict[str, Any]):
+    if not p:
+        return var, builder
+
     if isinstance(p, Assign):
 
         try:
